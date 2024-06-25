@@ -2,6 +2,7 @@ package provider
 
 import (
 	"fmt"
+	"gotu-bookstore/pkg/authentication"
 	"sync"
 
 	"gotu-bookstore/internal/config"
@@ -51,4 +52,8 @@ func DatabaseProvider(cfg *config.Cfg) *gorm.DB {
 		db = db.Debug()
 	})
 	return db
+}
+
+func AuthJWTProvider(cfg *config.Cfg) authentication.AuthJWT {
+	return authentication.NewAuthJWT([]byte(cfg.Auth.JwtSecret))
 }

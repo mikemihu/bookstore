@@ -9,7 +9,10 @@ package provider
 import (
 	"gotu-bookstore/internal/app"
 	"gotu-bookstore/internal/config"
+	"gotu-bookstore/internal/delivery"
 	"gotu-bookstore/internal/delivery/middleware"
+	"gotu-bookstore/internal/repository"
+	"gotu-bookstore/internal/usecase"
 )
 
 // Injectors from wire.go:
@@ -17,7 +20,13 @@ import (
 func ProvideApp() *app.App {
 	cfg := config.Get()
 	zapLogger := LoggerProvider()
-	middlewareMiddleware := middleware.NewMiddleware(cfg, zapLogger)
-	appApp := app.AppNew(cfg, zapLogger, middlewareMiddleware)
+	authJWT := AuthJWTProvider(cfg)
+	gormDB := DatabaseProvider(cfg)
+	userRepo := repository.NewUserRepo(cfg, gormDB)
+	userUC := usecase.NewUserUC(cfg, zapLogger, userRepo, authJWT)
+	middlewareMiddleware := middleware.NewMiddleware(cfg, zapLogger, authJWT, userUC)
+	authDelivery := delivery.NewAuthDelivery(cfg, userUC)
+	userDelivery := delivery.NewUserDelivery(cfg, userUC)
+	appApp := app.AppNew(cfg, zapLogger, middlewareMiddleware, authDelivery, userDelivery)
 	return appApp
 }

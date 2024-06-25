@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"errors"
+	"gotu-bookstore/internal"
 	"net/http"
 	"time"
 
@@ -14,23 +15,29 @@ import (
 )
 
 type App struct {
-	cfg        *config.Cfg
-	logger     *zap.Logger
-	middleware *middleware.Middleware
-	gin        *gin.Engine
-	server     *http.Server
+	cfg          *config.Cfg
+	logger       *zap.Logger
+	middleware   *middleware.Middleware
+	gin          *gin.Engine
+	server       *http.Server
+	authDelivery internal.AuthDelivery
+	userDelivery internal.UserDelivery
 }
 
 func AppNew(
 	cfg *config.Cfg,
 	logger *zap.Logger,
 	middleware *middleware.Middleware,
+	authDelivery internal.AuthDelivery,
+	userDelivery internal.UserDelivery,
 ) *App {
 	return &App{
-		cfg:        cfg,
-		logger:     logger,
-		gin:        gin.Default(),
-		middleware: middleware,
+		cfg:          cfg,
+		logger:       logger,
+		gin:          gin.Default(),
+		middleware:   middleware,
+		authDelivery: authDelivery,
+		userDelivery: userDelivery,
 	}
 }
 
@@ -44,8 +51,10 @@ func (a *App) Run() error {
 	// routing
 	a.registerRoutes()
 
+	a.logger.Info("app listening", zap.String("address", a.cfg.App.Address))
+
 	a.server = &http.Server{
-		Addr:    ":8080",
+		Addr:    a.cfg.App.Address,
 		Handler: a.gin.Handler(),
 	}
 	// start server

@@ -1,10 +1,9 @@
 package provider
 
 import (
-	"github.com/google/wire"
-
 	"gotu-bookstore/internal/app"
 	"gotu-bookstore/internal/config"
+	"gotu-bookstore/internal/delivery"
 	"gotu-bookstore/internal/delivery/middleware"
 	"gotu-bookstore/internal/repository"
 	"gotu-bookstore/internal/usecase"
@@ -16,16 +15,21 @@ var BaseSet = wire.NewSet(
 	config.Get,
 	LoggerProvider,
 	DatabaseProvider,
+	AuthJWTProvider,
 )
 
 var RepositorySet = wire.NewSet(
 	repository.NewUserRepo,
 )
 
-var UseCaseSet = wire.NewSet()
+var UseCaseSet = wire.NewSet(
+	usecase.NewUserUC,
+)
 
 var DeliverySet = wire.NewSet(
 	middleware.NewMiddleware,
+	delivery.NewAuthDelivery,
+	delivery.NewUserDelivery,
 )
 
 var AppSet = wire.NewSet(
