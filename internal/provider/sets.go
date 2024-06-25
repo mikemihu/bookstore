@@ -6,6 +6,7 @@ import (
 	"gotu-bookstore/internal/app"
 	"gotu-bookstore/internal/config"
 	"gotu-bookstore/internal/delivery/middleware"
+	"gotu-bookstore/internal/repository"
 )
 
 var BaseSet = wire.NewSet(
@@ -14,7 +15,9 @@ var BaseSet = wire.NewSet(
 	DatabaseProvider,
 )
 
-var RepositorySet = wire.NewSet()
+var RepositorySet = wire.NewSet(
+	repository.NewUserRepo,
+)
 
 var UseCaseSet = wire.NewSet()
 
