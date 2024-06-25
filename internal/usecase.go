@@ -17,3 +17,10 @@ type UserUC interface {
 	// Me returns current user's record
 	Me(ctx context.Context) (entity.UserResponse, error)
 }
+
+type BookUC interface {
+	// GetList returns all book
+	GetList(ctx context.Context, filter entity.BookFilter) ([]entity.BookResponse, error)
+	// Get returns single book record
+	Get(ctx context.Context, filter entity.BookFilter) (entity.BookResponse, error)
+}

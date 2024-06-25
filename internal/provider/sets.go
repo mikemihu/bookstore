@@ -20,16 +20,19 @@ var BaseSet = wire.NewSet(
 
 var RepositorySet = wire.NewSet(
 	repository.NewUserRepo,
+	repository.NewBookRepo,
 )
 
 var UseCaseSet = wire.NewSet(
 	usecase.NewUserUC,
+	usecase.NewBookUC,
 )
 
 var DeliverySet = wire.NewSet(
 	middleware.NewMiddleware,
 	delivery.NewAuthDelivery,
 	delivery.NewUserDelivery,
+	delivery.NewBookDelivery,
 )
 
 var AppSet = wire.NewSet(

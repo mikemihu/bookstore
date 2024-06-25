@@ -19,4 +19,9 @@ func (a *App) registerRoutes() {
 	user.POST("/register", a.userDelivery.Register)
 	userAuth := user.Use(a.middleware.Authenticated())
 	userAuth.GET("/me", a.userDelivery.Me)
+
+	// book endpoint
+	book := a.gin.Group("book")
+	book.GET("/list", a.bookDelivery.GetList)
+	book.GET("/:id", a.bookDelivery.Get)
 }

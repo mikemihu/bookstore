@@ -8,8 +8,15 @@ import (
 )
 
 type UserRepo interface {
-	// Get gets multiple or single row if id provided
+	// Get gets multiple or single user record if id provided
 	Get(ctx context.Context, filter entity.UserFilter) ([]entity.User, error)
 	// Store create new user record
 	Store(ctx context.Context, user entity.User) (uuid.UUID, error)
+}
+
+type BookRepo interface {
+	// Get gets multiple or single book record if id provided
+	Get(ctx context.Context, filter entity.BookFilter) ([]entity.Book, error)
+	// Store create new book record or update if id provided, will return affected id
+	Store(ctx context.Context, book entity.Book) (uuid.UUID, error)
 }

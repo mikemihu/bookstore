@@ -11,7 +11,7 @@ CREATE TABLE "users"
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
 );
 
--- seeder
+-- seeder (dummy data)
 INSERT INTO users (id, email, password)
 VALUES ('3ceb2c5b-d459-4fdc-a871-bcf9d6dc61cb', 'admin@app.com',
         '$2a$10$W0HLGiNo8/PpX8z.jWhJ/uQFEACgixvWIrPE8VPOr31o7cYwT8C4.'),

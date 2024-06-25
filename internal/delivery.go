@@ -13,3 +13,10 @@ type UserDelivery interface {
 	// Me gets authenticated user info
 	Me(c *gin.Context)
 }
+
+type BookDelivery interface {
+	// GetList returns all books
+	GetList(c *gin.Context)
+	// Get returns single book
+	Get(c *gin.Context)
+}

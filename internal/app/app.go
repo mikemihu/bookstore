@@ -22,6 +22,7 @@ type App struct {
 	server       *http.Server
 	authDelivery internal.AuthDelivery
 	userDelivery internal.UserDelivery
+	bookDelivery internal.BookDelivery
 }
 
 func AppNew(
@@ -30,6 +31,7 @@ func AppNew(
 	middleware *middleware.Middleware,
 	authDelivery internal.AuthDelivery,
 	userDelivery internal.UserDelivery,
+	bookDelivery internal.BookDelivery,
 ) *App {
 	return &App{
 		cfg:          cfg,
@@ -38,6 +40,7 @@ func AppNew(
 		middleware:   middleware,
 		authDelivery: authDelivery,
 		userDelivery: userDelivery,
+		bookDelivery: bookDelivery,
 	}
 }
 
