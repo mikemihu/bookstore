@@ -7,6 +7,9 @@ import (
 	"gotu-bookstore/internal/config"
 	"gotu-bookstore/internal/delivery/middleware"
 	"gotu-bookstore/internal/repository"
+	"gotu-bookstore/internal/usecase"
+
+	"github.com/google/wire"
 )
 
 var BaseSet = wire.NewSet(
