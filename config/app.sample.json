@@ -12,6 +12,6 @@
     }
   },
   "auth": {
-    "jwt_secret": "jwt-secret"
+    "jwtsecret": "jwt-secret"
   }
 }
