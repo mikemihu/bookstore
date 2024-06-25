@@ -13,7 +13,8 @@ gen-mock: ## Generate mocks
 test: ## Run unit test with coverage info
 	@go test ./... -v --cover
 
-GOOSE_DBSTRING="host=127.0.0.1 port=5432 user=gotu password=password dbname=bookstore sslmode=disable"
+# local development db dsn
+GOOSE_DBSTRING="host=127.0.0.1 port=5432 user=gotu password=password dbname=gotu sslmode=disable"
 
 migrate: ## Run db migration up
 	@GOOSE_DRIVER=postgres \
