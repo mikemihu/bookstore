@@ -1,9 +1,12 @@
 package middleware
 
 import (
+	"errors"
 	"gotu-bookstore/internal"
 	"gotu-bookstore/internal/config"
 	"gotu-bookstore/internal/constant"
+	"gotu-bookstore/internal/contexts"
+	"gotu-bookstore/internal/entity"
 	authPkg "gotu-bookstore/pkg/authentication"
 	"net/http"
 	"strings"
@@ -13,23 +16,23 @@ import (
 )
 
 type Middleware struct {
-	cfg     *config.Cfg
-	logger  *zap.Logger
-	authJWT authPkg.AuthJWT
-	userUC  internal.UserUC
+	cfg      *config.Cfg
+	logger   *zap.Logger
+	authJWT  authPkg.AuthJWT
+	userRepo internal.UserRepo
 }
 
 func NewMiddleware(
 	cfg *config.Cfg,
 	logger *zap.Logger,
 	authJWT authPkg.AuthJWT,
-	userUC internal.UserUC,
+	userRepo internal.UserRepo,
 ) *Middleware {
 	return &Middleware{
-		cfg:     cfg,
-		logger:  logger,
-		authJWT: authJWT,
-		userUC:  userUC,
+		cfg:      cfg,
+		logger:   logger,
+		authJWT:  authJWT,
+		userRepo: userRepo,
 	}
 }
 
@@ -37,7 +40,7 @@ func (m *Middleware) Authenticated() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 			c.Abort()
 			return
 		}
@@ -47,19 +50,30 @@ func (m *Middleware) Authenticated() gin.HandlerFunc {
 
 		claims, err := m.authJWT.ParseToken(m.cfg.Auth.JwtSecret, tokenString)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid token"})
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid token"})
 			c.Abort()
 			return
 		}
 
 		// get user from db
-		userResp, err := m.userUC.Get(c.Request.Context(), claims.UserID)
+		filter := entity.UserFilter{
+			User: entity.User{
+				BaseModel: entity.BaseModel{ID: claims.UserID},
+			},
+		}
+		users, err := m.userRepo.Get(c, filter)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"message": "User not found"})
+			if !errors.Is(err, constant.ErrNotFound) {
+				m.logger.Error("failed userRepo.Get", zap.Error(err),
+					zap.String("user_id", claims.UserID.String()))
+			}
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "user not found"})
 			c.Abort()
 			return
 		}
-		c.Set(constant.CtxKeyUser, userResp)
+
+		// put user into context
+		c.Set(contexts.CtxKeyUser, users[0])
 
 		c.Next()
 	}

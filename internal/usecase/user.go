@@ -6,6 +6,7 @@ import (
 	"gotu-bookstore/internal"
 	"gotu-bookstore/internal/config"
 	"gotu-bookstore/internal/constant"
+	"gotu-bookstore/internal/contexts"
 	"gotu-bookstore/internal/entity"
 	authPkg "gotu-bookstore/pkg/authentication"
 
@@ -82,9 +83,7 @@ func (u *UserUC) Login(ctx context.Context, req entity.AuthLoginRequest) (string
 func (u *UserUC) Get(ctx context.Context, id uuid.UUID) (entity.UserResponse, error) {
 	filter := entity.UserFilter{
 		User: entity.User{
-			BaseModel: entity.BaseModel{
-				ID: id,
-			},
+			BaseModel: entity.BaseModel{ID: id},
 		},
 	}
 	users, err := u.userRepo.Get(ctx, filter)
@@ -98,9 +97,6 @@ func (u *UserUC) Get(ctx context.Context, id uuid.UUID) (entity.UserResponse, er
 }
 
 func (u *UserUC) Me(ctx context.Context) (entity.UserResponse, error) {
-	userResp, ok := ctx.Value(constant.CtxKeyUser).(entity.UserResponse)
-	if !ok {
-		return entity.UserResponse{}, constant.ErrUserNotFound
-	}
-	return userResp, nil
+	user := contexts.GetUser(ctx)
+	return user.ToResponse(), nil
 }
