@@ -23,13 +23,16 @@ func ProvideApp() *app.App {
 	authJWT := AuthJWTProvider(cfg)
 	gormDB := DatabaseProvider(cfg)
 	userRepo := repository.NewUserRepo(cfg, gormDB)
+	middlewareMiddleware := middleware.NewMiddleware(cfg, zapLogger, authJWT, userRepo)
 	userUC := usecase.NewUserUC(cfg, zapLogger, userRepo, authJWT)
-	middlewareMiddleware := middleware.NewMiddleware(cfg, zapLogger, authJWT, userUC)
 	authDelivery := delivery.NewAuthDelivery(cfg, userUC)
 	userDelivery := delivery.NewUserDelivery(cfg, userUC)
 	bookRepo := repository.NewBookRepo(cfg, gormDB)
 	bookUC := usecase.NewBookUC(zapLogger, bookRepo)
 	bookDelivery := delivery.NewBookDelivery(cfg, bookUC)
-	appApp := app.AppNew(cfg, zapLogger, middlewareMiddleware, authDelivery, userDelivery, bookDelivery)
+	orderRepo := repository.NewOrderRepo(cfg, gormDB)
+	orderUC := usecase.NewOrderUC(zapLogger, orderRepo, bookRepo)
+	orderDelivery := delivery.NewOrderDelivery(cfg, orderUC)
+	appApp := app.AppNew(cfg, zapLogger, middlewareMiddleware, authDelivery, userDelivery, bookDelivery, orderDelivery)
 	return appApp
 }

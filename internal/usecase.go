@@ -19,8 +19,17 @@ type UserUC interface {
 }
 
 type BookUC interface {
-	// GetList returns all book
+	// GetList returns list of books
 	GetList(ctx context.Context, filter entity.BookFilter) ([]entity.BookResponse, error)
 	// Get returns single book record
 	Get(ctx context.Context, filter entity.BookFilter) (entity.BookResponse, error)
+}
+
+type OrderUC interface {
+	// GetList returns user's list of orders
+	GetList(ctx context.Context) ([]entity.OrderResponse, error)
+	// Get returns user's order detail
+	Get(ctx context.Context, id uuid.UUID) (entity.OrderResponse, error)
+	// Create creates new order
+	Create(ctx context.Context, req entity.OrderCreateRequest) (uuid.UUID, error)
 }

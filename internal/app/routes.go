@@ -24,4 +24,11 @@ func (a *App) registerRoutes() {
 	book := a.gin.Group("book")
 	book.GET("/list", a.bookDelivery.GetList)
 	book.GET("/:id", a.bookDelivery.Get)
+
+	// order endpoint
+	order := a.gin.Group("order")
+	order.Use(a.middleware.Authenticated())
+	order.GET("/list", a.orderDelivery.GetList)
+	order.GET("/:id", a.orderDelivery.Get)
+	order.POST("/create", a.orderDelivery.Create)
 }

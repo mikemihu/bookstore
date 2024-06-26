@@ -21,11 +21,13 @@ var BaseSet = wire.NewSet(
 var RepositorySet = wire.NewSet(
 	repository.NewUserRepo,
 	repository.NewBookRepo,
+	repository.NewOrderRepo,
 )
 
 var UseCaseSet = wire.NewSet(
 	usecase.NewUserUC,
 	usecase.NewBookUC,
+	usecase.NewOrderUC,
 )
 
 var DeliverySet = wire.NewSet(
@@ -33,6 +35,7 @@ var DeliverySet = wire.NewSet(
 	delivery.NewAuthDelivery,
 	delivery.NewUserDelivery,
 	delivery.NewBookDelivery,
+	delivery.NewOrderDelivery,
 )
 
 var AppSet = wire.NewSet(

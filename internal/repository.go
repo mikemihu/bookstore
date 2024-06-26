@@ -20,3 +20,10 @@ type BookRepo interface {
 	// Store create new book record or update if id provided, will return affected id
 	Store(ctx context.Context, book entity.Book) (uuid.UUID, error)
 }
+
+type OrderRepo interface {
+	// Get gets multiple or single order record if id provided
+	Get(ctx context.Context, filter entity.OrderFilter) ([]entity.Order, error)
+	// Store create new order record or update if id provided, will return affected id
+	Store(ctx context.Context, order entity.Order) (uuid.UUID, error)
+}

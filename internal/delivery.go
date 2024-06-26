@@ -20,3 +20,12 @@ type BookDelivery interface {
 	// Get returns single book
 	Get(c *gin.Context)
 }
+
+type OrderDelivery interface {
+	// 	GetList returns user's orders history
+	GetList(c *gin.Context)
+	// Get returns user's order detail
+	Get(c *gin.Context)
+	// Create creates new order
+	Create(c *gin.Context)
+}

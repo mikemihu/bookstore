@@ -17,4 +17,5 @@ var (
 	// Business Errors
 
 	ErrInvalidBookID = errors.New("invalid book id")
+	ErrInvalidQty    = errors.New("invalid qty")
 )

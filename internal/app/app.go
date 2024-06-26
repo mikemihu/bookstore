@@ -15,14 +15,15 @@ import (
 )
 
 type App struct {
-	cfg          *config.Cfg
-	logger       *zap.Logger
-	middleware   *middleware.Middleware
-	gin          *gin.Engine
-	server       *http.Server
-	authDelivery internal.AuthDelivery
-	userDelivery internal.UserDelivery
-	bookDelivery internal.BookDelivery
+	cfg           *config.Cfg
+	logger        *zap.Logger
+	middleware    *middleware.Middleware
+	gin           *gin.Engine
+	server        *http.Server
+	authDelivery  internal.AuthDelivery
+	userDelivery  internal.UserDelivery
+	bookDelivery  internal.BookDelivery
+	orderDelivery internal.OrderDelivery
 }
 
 func AppNew(
@@ -32,15 +33,17 @@ func AppNew(
 	authDelivery internal.AuthDelivery,
 	userDelivery internal.UserDelivery,
 	bookDelivery internal.BookDelivery,
+	orderDelivery internal.OrderDelivery,
 ) *App {
 	return &App{
-		cfg:          cfg,
-		logger:       logger,
-		gin:          gin.Default(),
-		middleware:   middleware,
-		authDelivery: authDelivery,
-		userDelivery: userDelivery,
-		bookDelivery: bookDelivery,
+		cfg:           cfg,
+		logger:        logger,
+		gin:           gin.Default(),
+		middleware:    middleware,
+		authDelivery:  authDelivery,
+		userDelivery:  userDelivery,
+		bookDelivery:  bookDelivery,
+		orderDelivery: orderDelivery,
 	}
 }
 
