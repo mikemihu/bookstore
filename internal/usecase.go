@@ -20,9 +20,9 @@ type UserUC interface {
 
 type BookUC interface {
 	// GetList returns list of books
-	GetList(ctx context.Context, filter entity.BookFilter) ([]entity.BookResponse, error)
+	GetList(ctx context.Context, filter entity.BookGetListRequest) ([]entity.BookResponse, error)
 	// Get returns single book record
-	Get(ctx context.Context, filter entity.BookFilter) (entity.BookResponse, error)
+	Get(ctx context.Context, id uuid.UUID) (entity.BookResponse, error)
 }
 
 type OrderUC interface {

@@ -7,6 +7,7 @@ import (
 	"gotu-bookstore/internal/constant"
 	"gotu-bookstore/internal/entity"
 
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
@@ -25,7 +26,11 @@ func NewBookUC(
 	}
 }
 
-func (p *BookUC) GetList(ctx context.Context, filter entity.BookFilter) ([]entity.BookResponse, error) {
+func (p *BookUC) GetList(ctx context.Context, req entity.BookGetListRequest) ([]entity.BookResponse, error) {
+	filter := entity.BookFilter{
+		Search: req.Search,
+		IDs:    req.IDs,
+	}
 	books, err := p.bookRepo.Get(ctx, filter)
 	if err != nil {
 		if !errors.Is(err, constant.ErrNotFound) {
@@ -42,7 +47,12 @@ func (p *BookUC) GetList(ctx context.Context, filter entity.BookFilter) ([]entit
 	return resp, nil
 }
 
-func (p *BookUC) Get(ctx context.Context, filter entity.BookFilter) (entity.BookResponse, error) {
+func (p *BookUC) Get(ctx context.Context, id uuid.UUID) (entity.BookResponse, error) {
+	filter := entity.BookFilter{
+		Book: entity.Book{
+			BaseModel: entity.BaseModel{ID: id},
+		},
+	}
 	books, err := p.bookRepo.Get(ctx, filter)
 	if err != nil {
 		if !errors.Is(err, constant.ErrNotFound) {

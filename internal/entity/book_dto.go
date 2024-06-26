@@ -21,5 +21,6 @@ type BookResponse struct {
 
 type BookGetListRequest struct {
 	Search string   `form:"search"`
-	IDs    []string `form:"ids"`
+	IDsRaw []string `form:"ids"`
+	IDs    []uuid.UUID
 }
