@@ -7,6 +7,7 @@ services:
       POSTGRES_USER: gotu
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
+    restart: unless-stopped
     volumes:
       - postgres-data:/data/postgres
     ports:
@@ -20,7 +21,7 @@ services:
   redis:
     command: sh -c "redis-server --appendonly yes"
     image: redis:6.2-alpine
-    restart: always
+    restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
