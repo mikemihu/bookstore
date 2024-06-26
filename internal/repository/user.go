@@ -72,9 +72,10 @@ func (u *UserRepo) applyFilter(tx *gorm.DB, filter entity.UserFilter) *gorm.DB {
 func (u *UserRepo) Store(ctx context.Context, user entity.User) (uuid.UUID, error) {
 	tx := u.db.WithContext(ctx)
 
+	// create new record
 	if user.ID == uuid.Nil {
-		// create new record
-		err := tx.Omit("ID").Create(&user).Error
+		user.ID = uuid.New()
+		err := tx.Create(&user).Error
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return uuid.Nil, constant.ErrDuplicateRecord
 		}

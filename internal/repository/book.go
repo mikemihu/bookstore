@@ -59,9 +59,10 @@ func (p *BookRepo) applyFilter(tx *gorm.DB, filter entity.BookFilter) *gorm.DB {
 func (p *BookRepo) Store(ctx context.Context, book entity.Book) (uuid.UUID, error) {
 	tx := p.db.WithContext(ctx)
 
+	// create new record
 	if book.ID == uuid.Nil {
-		// create new record
-		err := tx.Omit("ID").Create(&book).Error
+		book.ID = uuid.New()
+		err := tx.Create(&book).Error
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return uuid.Nil, constant.ErrDuplicateRecord
 		}

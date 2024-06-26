@@ -1,10 +1,8 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE "users"
 (
-    id         UUID PRIMARY KEY         DEFAULT uuid_generate_v4(),
+    id         UUID PRIMARY KEY         DEFAULT gen_random_uuid(),
     email      TEXT UNIQUE                            NOT NULL,
     password   TEXT                                   NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
@@ -46,6 +44,4 @@ VALUES ('3ceb2c5b-d459-4fdc-a871-bcf9d6dc61cb', 'admin@app.com',
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE IF EXISTS "users" CASCADE;
-
-DROP EXTENSION IF EXISTS "uuid-ossp";
 -- +goose StatementEnd
