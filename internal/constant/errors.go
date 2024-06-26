@@ -16,4 +16,5 @@ var (
 
 	// Business Errors
 
+	ErrInvalidBookID = errors.New("invalid book id")
 )

@@ -27,13 +27,25 @@ func NewBookDelivery(
 
 func (b *BookDelivery) GetList(c *gin.Context) {
 	var req entity.BookGetListRequest
-	err := c.BindQuery(&req)
+	err := c.ShouldBindQuery(&req)
 	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
+	}
+
+	// map IDs
+	ids := make(uuid.UUIDs, len(req.IDs))
+	for i := range req.IDs {
+		ids[i], err = uuid.Parse(req.IDs[i])
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "invalid uuid"})
+			return
+		}
 	}
 
 	filter := entity.BookFilter{
 		Search: req.Search,
+		IDs:    ids,
 	}
 	books, err := b.bookUC.GetList(c, filter)
 	if err != nil {
@@ -54,7 +66,9 @@ func (b *BookDelivery) Get(c *gin.Context) {
 	}
 
 	filter := entity.BookFilter{
-		Book: entity.Book{ID: id},
+		Book: entity.Book{
+			BaseModel: entity.BaseModel{ID: id},
+		},
 	}
 	book, err := b.bookUC.Get(c, filter)
 	if err != nil {

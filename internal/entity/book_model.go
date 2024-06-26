@@ -1,14 +1,12 @@
 package entity
 
-import "github.com/google/uuid"
-
 type Book struct {
 	BaseModel
-	ID       uuid.UUID
 	ISBN     string
 	Author   string
 	Title    string
 	Subtitle string
+	Price    float64
 }
 
 func (b *Book) ToResponse() BookResponse {
@@ -18,5 +16,6 @@ func (b *Book) ToResponse() BookResponse {
 		Author:   b.Author,
 		Title:    b.Title,
 		Subtitle: b.Subtitle,
+		Price:    b.Price,
 	}
 }
