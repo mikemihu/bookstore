@@ -12,8 +12,8 @@ type AuthJWTImpl struct {
 }
 
 type AuthJWT interface {
-	GenerateToken(secret string, userID uuid.UUID) (string, error)
-	ParseToken(secret string, tokenString string) (AuthClaims, error)
+	GenerateToken(userID uuid.UUID) (string, error)
+	ParseToken(tokenString string) (AuthClaims, error)
 }
 
 func NewAuthJWT(secret []byte) AuthJWT {
@@ -22,13 +22,8 @@ func NewAuthJWT(secret []byte) AuthJWT {
 	}
 }
 
-type AuthClaims struct {
-	jwt.RegisteredClaims
-	UserID uuid.UUID
-}
-
 // GenerateToken return jwt token of user id
-func (a *AuthJWTImpl) GenerateToken(secret string, userID uuid.UUID) (string, error) {
+func (a *AuthJWTImpl) GenerateToken(userID uuid.UUID) (string, error) {
 	claims := AuthClaims{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -39,7 +34,7 @@ func (a *AuthJWTImpl) GenerateToken(secret string, userID uuid.UUID) (string, er
 	// generate token with claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	signed, err := token.SignedString([]byte(secret))
+	signed, err := token.SignedString(a.secret)
 	if err != nil {
 		return "", err
 	}
@@ -47,13 +42,13 @@ func (a *AuthJWTImpl) GenerateToken(secret string, userID uuid.UUID) (string, er
 	return signed, nil
 }
 
-func (a *AuthJWTImpl) ParseToken(secret string, tokenString string) (AuthClaims, error) {
+func (a *AuthJWTImpl) ParseToken(tokenString string) (AuthClaims, error) {
 	var claims AuthClaims
 	token, err := jwt.ParseWithClaims(tokenString, &claims, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, jwt.ErrSignatureInvalid
 		}
-		return []byte(secret), nil
+		return a.secret, nil
 	})
 	if err != nil {
 		return AuthClaims{}, err

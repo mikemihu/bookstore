@@ -76,7 +76,7 @@ func (u *UserUC) Login(ctx context.Context, req entity.AuthLoginRequest) (string
 		return "", constant.ErrInvalidPassword
 	}
 
-	token, err := u.authJWT.GenerateToken(u.cfg.Auth.JwtSecret, user.ID)
+	token, err := u.authJWT.GenerateToken(user.ID)
 	if err != nil {
 		u.logger.Error("failed authJWT.GenerateToken", zap.Error(err),
 			zap.Any("user", user))

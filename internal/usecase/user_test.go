@@ -149,7 +149,7 @@ func TestUserUC_Login(t *testing.T) {
 				}(),
 				authJWT: func() *mocks.MockAuthJWT {
 					mock := mocks.NewMockAuthJWT(ctrl)
-					mock.EXPECT().GenerateToken("test-jwt-secret", dummyID).Return("token-test-1234", nil)
+					mock.EXPECT().GenerateToken(dummyID).Return("token-test-1234", nil)
 					return mock
 				}(),
 			},
@@ -255,7 +255,7 @@ func TestUserUC_Login(t *testing.T) {
 				}(),
 				authJWT: func() *mocks.MockAuthJWT {
 					mock := mocks.NewMockAuthJWT(ctrl)
-					mock.EXPECT().GenerateToken(gomock.Any(), dummyID).Return("", errors.New("some error from GenerateToken"))
+					mock.EXPECT().GenerateToken(dummyID).Return("", errors.New("some error from GenerateToken"))
 					return mock
 				}(),
 			},

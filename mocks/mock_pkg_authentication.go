@@ -36,31 +36,31 @@ func (m *MockAuthJWT) EXPECT() *MockAuthJWTMockRecorder {
 }
 
 // GenerateToken mocks base method.
-func (m *MockAuthJWT) GenerateToken(secret string, userID uuid.UUID) (string, error) {
+func (m *MockAuthJWT) GenerateToken(userID uuid.UUID) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GenerateToken", secret, userID)
+	ret := m.ctrl.Call(m, "GenerateToken", userID)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GenerateToken indicates an expected call of GenerateToken.
-func (mr *MockAuthJWTMockRecorder) GenerateToken(secret, userID interface{}) *gomock.Call {
+func (mr *MockAuthJWTMockRecorder) GenerateToken(userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateToken", reflect.TypeOf((*MockAuthJWT)(nil).GenerateToken), secret, userID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateToken", reflect.TypeOf((*MockAuthJWT)(nil).GenerateToken), userID)
 }
 
 // ParseToken mocks base method.
-func (m *MockAuthJWT) ParseToken(secret, tokenString string) (authentication.AuthClaims, error) {
+func (m *MockAuthJWT) ParseToken(tokenString string) (authentication.AuthClaims, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ParseToken", secret, tokenString)
+	ret := m.ctrl.Call(m, "ParseToken", tokenString)
 	ret0, _ := ret[0].(authentication.AuthClaims)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ParseToken indicates an expected call of ParseToken.
-func (mr *MockAuthJWTMockRecorder) ParseToken(secret, tokenString interface{}) *gomock.Call {
+func (mr *MockAuthJWTMockRecorder) ParseToken(tokenString interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ParseToken", reflect.TypeOf((*MockAuthJWT)(nil).ParseToken), secret, tokenString)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ParseToken", reflect.TypeOf((*MockAuthJWT)(nil).ParseToken), tokenString)
 }

@@ -48,7 +48,7 @@ func (m *Middleware) Authenticated() gin.HandlerFunc {
 		// remove "Bearer " prefix if exists
 		tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 
-		claims, err := m.authJWT.ParseToken(m.cfg.Auth.JwtSecret, tokenString)
+		claims, err := m.authJWT.ParseToken(tokenString)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "invalid token"})
 			c.Abort()
