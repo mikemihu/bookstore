@@ -33,6 +33,7 @@ func (u *UserDelivery) Register(c *gin.Context) {
 		return
 	}
 
+	// validation
 	if req.Email == "" || req.Password == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "email and password is required"})
 		return

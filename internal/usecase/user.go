@@ -48,6 +48,8 @@ func (u *UserUC) Register(ctx context.Context, req entity.UserRegisterRequest) e
 	}
 	user.ID, err = u.userRepo.Store(ctx, user)
 	if err != nil {
+		u.logger.Error("failed to store user", zap.Error(err),
+			zap.Any("user", user))
 		return err
 	}
 
@@ -59,21 +61,25 @@ func (u *UserUC) Login(ctx context.Context, req entity.AuthLoginRequest) (string
 		User: entity.User{Email: req.Email},
 	}
 	users, err := u.userRepo.Get(ctx, filter)
-	if errors.Is(err, constant.ErrNotFound) || len(users) == 0 {
+	if errors.Is(err, constant.ErrNotFound) {
 		return "", constant.ErrUserNotFound
 	}
 	if err != nil {
+		u.logger.Error("failed to get user", zap.Error(err),
+			zap.Any("user", req))
 		return "", err
 	}
 	user := users[0]
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
-		return "", err
+		return "", constant.ErrInvalidPassword
 	}
 
 	token, err := u.authJWT.GenerateToken(u.cfg.Auth.JwtSecret, user.ID)
 	if err != nil {
+		u.logger.Error("failed authJWT.GenerateToken", zap.Error(err),
+			zap.Any("user", user))
 		return "", err
 	}
 
@@ -91,12 +97,14 @@ func (u *UserUC) Get(ctx context.Context, id uuid.UUID) (entity.UserResponse, er
 		return entity.UserResponse{}, constant.ErrNotFound
 	}
 	if err != nil {
+		u.logger.Error("failed to get user", zap.Error(err),
+			zap.Any("filter", filter))
 		return entity.UserResponse{}, err
 	}
 	return users[0].ToResponse(), nil
 }
 
-func (u *UserUC) Me(ctx context.Context) (entity.UserResponse, error) {
+func (_ *UserUC) Me(ctx context.Context) (entity.UserResponse, error) {
 	user := contexts.GetUser(ctx)
 	return user.ToResponse(), nil
 }
