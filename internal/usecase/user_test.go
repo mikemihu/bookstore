@@ -9,7 +9,7 @@ import (
 	"gotu-bookstore/internal/contexts"
 	"gotu-bookstore/internal/entity"
 	"gotu-bookstore/mocks"
-	"gotu-bookstore/pkg/authentication"
+	"gotu-bookstore/pkg/auth_jwt"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -114,7 +114,7 @@ func TestUserUC_Login(t *testing.T) {
 	type fields struct {
 		cfg      *config.Cfg
 		userRepo internal.UserRepo
-		authJWT  authentication.AuthJWT
+		authJWT  auth_jwt.AuthJWT
 	}
 	type args struct {
 		req entity.AuthLoginRequest

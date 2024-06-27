@@ -1,6 +1,7 @@
-package authentication
+package auth_jwt
 
 import (
+	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -8,7 +9,8 @@ import (
 )
 
 type AuthJWTImpl struct {
-	secret []byte
+	secret    []byte
+	expiresIn time.Duration
 }
 
 type AuthJWT interface {
@@ -18,7 +20,8 @@ type AuthJWT interface {
 
 func NewAuthJWT(secret []byte) AuthJWT {
 	return &AuthJWTImpl{
-		secret: secret,
+		secret:    secret,
+		expiresIn: time.Hour * 72, // expired in 3 days
 	}
 }
 
@@ -27,7 +30,7 @@ func (a *AuthJWTImpl) GenerateToken(userID uuid.UUID) (string, error) {
 	claims := AuthClaims{
 		UserID: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(a.expiresIn)),
 		},
 	}
 
@@ -55,7 +58,7 @@ func (a *AuthJWTImpl) ParseToken(tokenString string) (AuthClaims, error) {
 	}
 
 	if !token.Valid {
-		return AuthClaims{}, err
+		return AuthClaims{}, errors.New("token is not valid")
 	}
 
 	return claims, nil

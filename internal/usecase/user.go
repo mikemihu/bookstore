@@ -8,7 +8,7 @@ import (
 	"gotu-bookstore/internal/constant"
 	"gotu-bookstore/internal/contexts"
 	"gotu-bookstore/internal/entity"
-	authPkg "gotu-bookstore/pkg/authentication"
+	authJWTPkg "gotu-bookstore/pkg/auth_jwt"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -19,14 +19,14 @@ type UserUC struct {
 	cfg      *config.Cfg
 	logger   *zap.Logger
 	userRepo internal.UserRepo
-	authJWT  authPkg.AuthJWT
+	authJWT  authJWTPkg.AuthJWT
 }
 
 func NewUserUC(
 	cfg *config.Cfg,
 	logger *zap.Logger,
 	userRepo internal.UserRepo,
-	authJWT authPkg.AuthJWT,
+	authJWT authJWTPkg.AuthJWT,
 ) internal.UserUC {
 	return &UserUC{
 		cfg:      cfg,

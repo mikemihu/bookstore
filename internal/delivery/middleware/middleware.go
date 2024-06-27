@@ -7,7 +7,7 @@ import (
 	"gotu-bookstore/internal/constant"
 	"gotu-bookstore/internal/contexts"
 	"gotu-bookstore/internal/entity"
-	authPkg "gotu-bookstore/pkg/authentication"
+	authJWTPkg "gotu-bookstore/pkg/auth_jwt"
 	"net/http"
 	"strings"
 
@@ -18,14 +18,14 @@ import (
 type Middleware struct {
 	cfg      *config.Cfg
 	logger   *zap.Logger
-	authJWT  authPkg.AuthJWT
+	authJWT  authJWTPkg.AuthJWT
 	userRepo internal.UserRepo
 }
 
 func NewMiddleware(
 	cfg *config.Cfg,
 	logger *zap.Logger,
-	authJWT authPkg.AuthJWT,
+	authJWT authJWTPkg.AuthJWT,
 	userRepo internal.UserRepo,
 ) *Middleware {
 	return &Middleware{

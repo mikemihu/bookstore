@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	authentication "gotu-bookstore/pkg/authentication"
+	authentication "gotu-bookstore/pkg/auth_jwt"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
