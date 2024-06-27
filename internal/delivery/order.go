@@ -66,6 +66,17 @@ func (b *OrderDelivery) Create(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "items is required"})
 		return
 	}
+	for i := range req.Items {
+		item := &req.Items[i]
+		if item.BookID == uuid.Nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "invalid book id"})
+			return
+		}
+		if item.Qty <= 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "invalid qty"})
+			return
+		}
+	}
 
 	id, err := b.orderUC.Create(c, req)
 	if err != nil {

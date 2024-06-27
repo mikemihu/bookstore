@@ -17,6 +17,5 @@ var (
 
 	ErrUserNotFound    = errors.New("user not found")
 	ErrInvalidPassword = errors.New("invalid password")
-	ErrInvalidBookID   = errors.New("invalid book id")
-	ErrInvalidQty      = errors.New("invalid qty")
+	ErrNoOrderYet      = errors.New("no order yet")
 )

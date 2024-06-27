@@ -38,11 +38,12 @@ func (p *OrderUC) GetList(ctx context.Context) ([]entity.OrderResponse, error) {
 		},
 	}
 	orders, err := p.orderRepo.Get(ctx, filter)
+	if errors.Is(err, constant.ErrNotFound) {
+		return nil, constant.ErrNoOrderYet
+	}
 	if err != nil {
-		if !errors.Is(err, constant.ErrNotFound) {
-			p.logger.Error("failed orderRepo.Get", zap.Error(err),
-				zap.String("user_id", userID.String()))
-		}
+		p.logger.Error("failed orderRepo.Get", zap.Error(err),
+			zap.String("user_id", userID.String()))
 		return nil, err
 	}
 
@@ -58,7 +59,7 @@ func (p *OrderUC) Get(ctx context.Context, id uuid.UUID) (entity.OrderResponse, 
 	filter := entity.OrderFilter{
 		Order: entity.Order{
 			BaseModel: entity.BaseModel{ID: id},
-			UserID:    userID,
+			UserID:    userID, // to make sure user's can only get his own orders
 		},
 		PreloadDetail: true,
 	}
@@ -84,14 +85,6 @@ func (p *OrderUC) Create(ctx context.Context, req entity.OrderCreateRequest) (uu
 
 	for i := range req.Items {
 		item := &req.Items[i]
-
-		// validates
-		if item.BookID == uuid.Nil {
-			return uuid.Nil, constant.ErrInvalidBookID
-		}
-		if item.Qty <= 0 {
-			return uuid.Nil, constant.ErrInvalidQty
-		}
 
 		// check if book exists
 		bookFilter := entity.BookFilter{
