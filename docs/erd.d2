@@ -1,0 +1,47 @@
+direction: right
+
+users: {
+    shape: sql_table
+    id: uuid {constraint: primary_key}
+    email: text {constraint: unique}
+    password: text
+    updated_at: timestamp tz
+    created_at: timestamp tz
+}
+
+books: {
+    shape: sql_table
+    id: uuid {constraint: primary_key}
+    isbn: varchar(13) {constraint: unique}
+    author: text
+    title: text
+    subtitle: text
+    price: numeric
+    updated_at: timestamp tz
+    created_at: timestamp tz
+}
+
+orders: {
+    shape: sql_table
+    id: uuid {constraint: primary_key}
+    user_id: uuid {constraint: foreign_key}
+    total_qty: integer
+    total_price: numeric
+    updated_at: timestamp tz
+    created_at: timestamp tz
+}
+
+order_items: {
+    shape: sql_table
+    id: uuid {constraint: primary_key}
+    order_id: uuid {constraint: foreign_key}
+    book_id: uuid {constraint: foreign_key}
+    qty: integer
+    price: numeric
+    updated_at: timestamp tz
+    created_at: timestamp tz
+}
+
+orders.user_id -> users.id
+order_items.order_id -> orders.id
+order_items.book_id -> books.id
