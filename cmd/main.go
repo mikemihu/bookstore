@@ -12,7 +12,7 @@ import (
 
 func main() {
 	logger := provider.LoggerProvider()
-	defer logger.Sync()
+	defer logger.Sync() //nolint:errcheck // no action can be taken when Sync returns an error
 
 	app := provider.ProvideApp()
 
