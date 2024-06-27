@@ -60,6 +60,7 @@ Find all existing commands by run `make help` command.
 ```
 gen-mock                       Generate mocks
 help                           Show this help
+lint                           Run golangci-lint
 migrate                        Run db migration up
 migrate-down                   Run db migration down
 run                            Run the app

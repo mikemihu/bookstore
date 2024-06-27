@@ -26,4 +26,7 @@ migrate-down: ## Run db migration down
  	GOOSE_DBSTRING=$(GOOSE_DBSTRING) \
  	goose -dir migrations down
 
-.PHONY: help wire run gen-mock test migrate migrate-down
+lint: ## Run golangci-lint
+	@golangci-lint run
+
+.PHONY: help wire run gen-mock test migrate migrate-down lint
