@@ -9,6 +9,7 @@ import (
 	"gotu-bookstore/internal/contexts"
 	"gotu-bookstore/internal/entity"
 	authJWTPkg "gotu-bookstore/pkg/auth_jwt"
+	"strings"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -43,7 +44,7 @@ func (u *UserUC) Register(ctx context.Context, req entity.UserRegisterRequest) e
 	}
 
 	user := entity.User{
-		Email:    req.Email,
+		Email:    strings.ToLower(req.Email),
 		Password: string(hashedPassword),
 	}
 	user.ID, err = u.userRepo.Store(ctx, user)
