@@ -14,7 +14,7 @@ Please make sure you have the following tools installed before you start.
 
 1. Copy config file
    ```shell
-   cp config/config.sample.json config/config.development.json
+   cp config/app.sample.json config/app.development.json
    ``` 
 2. Spin up database & redis with docker
    ```shell
