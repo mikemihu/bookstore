@@ -10,7 +10,6 @@ linters:
     - cyclop # checks function and package cyclomatic complexity
     - dupl # tool for code clone detection
     - errcheck # checking for unchecked errors, these unchecked errors can be critical bugs in some cases
-    - exportloopref # checks for pointers to enclosing loop variables
     - goimports # in addition to fixing imports, goimports also formats your code in the same style as gofmt
     - gomodguard # allow and block lists linter for direct Go module dependencies. This is different from depguard where there are different block types for example version constraints and module recommendations
     - goprintffuncname # checks that printf-like functions are named with f at the end
